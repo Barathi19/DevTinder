@@ -9,7 +9,9 @@ authRouter.post("/signup", validateSignUpData, async (req, res) => {
   const user = new User(req.body);
   await user.save();
 
-  res.send("User created successfully!");
+  res
+    .status(200)
+    .json({ success: true, message: "User created successfully!" });
 });
 
 authRouter.post("/login", async (req, res) => {
@@ -24,19 +26,23 @@ authRouter.post("/login", async (req, res) => {
     throw new ErrorResponse("User not found.", 404);
   }
 
-  if (!user.isPasswordMatch(password)) {
+  if (!(await user.isPasswordMatch(password))) {
     throw new ErrorResponse("Invalid credentials", 400);
   }
 
   const token = user.getJWT();
 
   res
-    .cookie("token", token, { expires: new Date(Date.now() + 24 * 36000) })
-    .send("Logged In successfully.");
+    .status(200)
+    .cookie("token", token, { expires: new Date(Date.now() + 24 * 3600000) })
+    .json({ success: true, message: "Logged In successfully." });
 });
 
-authRouter.post("/logout", async (req, res) => {
-  res.clearCookie("token".send("Logged out successfully."));
+authRouter.post("/logout", async (_, res) => {
+  res
+    .status(200)
+    .clearCookie("token")
+    .json({ success: true, message: "Logged out successfully." });
 });
 
 module.exports = authRouter;
