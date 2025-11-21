@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const validate = require("validator");
+const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const ErrorResponse = require("../utils/errorResponse");
@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       required: [true, "Email ID is required."],
       validate(val) {
-        if (!validate.isEmail(val)) {
+        if (!validator.isEmail(val)) {
           throw new ErrorResponse("Invalid Email ID.", 400);
         }
       },

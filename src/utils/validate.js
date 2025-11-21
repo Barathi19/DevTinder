@@ -31,17 +31,20 @@ const validateEditProfileData = (req, _, next) => {
     throw new ErrorResponse("Empty payload", 400);
   }
 
-  const { url, gender, skills } = req.body;
+  const { photoUrl, gender, skills } = req.body;
 
-  // const isEditAllowed = Object.keys(req?.body).every((field) =>
-  //   allowedEditFields.includes(field)
-  // );
+  const isEditAllowed = Object.keys(req?.body).every((field) =>
+    allowedEditFields.includes(field)
+  );
 
-  // if (!isEditAllowed) {
-  //   throw new ErrorResponse("Invalid payload", 400);
-  // }
+  if (!isEditAllowed) {
+    throw new ErrorResponse("Invalid payload", 400);
+  }
 
-  if (url && (typeof url !== "string" || !validator.isURL(val))) {
+  if (
+    photoUrl &&
+    (typeof photoUrl !== "string" || !validator.isURL(photoUrl))
+  ) {
     throw new ErrorResponse("Invalid URL.", 400);
   } else if (
     gender &&
@@ -50,9 +53,9 @@ const validateEditProfileData = (req, _, next) => {
   ) {
     throw new ErrorResponse("Invalid gender.", 400);
   } else if (
-    (skills && !Array.isArray(skills)) ||
-    skills.length < 1 ||
-    skills.length > 10
+    skills &&
+    !Array.isArray(skills) &&
+    (skills.length < 1 || skills.length > 10)
   ) {
     throw new ErrorResponse("Skills should be an array with 1 to 10", 400);
   }
