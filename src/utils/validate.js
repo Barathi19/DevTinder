@@ -42,18 +42,18 @@ const validateEditProfileData = (req, _, next) => {
   }
 
   if (
-    photoUrl &&
+    "photoUrl" in req.body &&
     (typeof photoUrl !== "string" || !validator.isURL(photoUrl))
   ) {
     throw new ErrorResponse("Invalid URL.", 400);
   } else if (
-    gender &&
+    "gender" in req.body &&
     (typeof gender !== "string" ||
       !["male", "female", "other"].includes(gender.toLowerCase()))
   ) {
     throw new ErrorResponse("Invalid gender.", 400);
   } else if (
-    skills &&
+    "skills" in req.body &&
     !Array.isArray(skills) &&
     (skills.length < 1 || skills.length > 10)
   ) {

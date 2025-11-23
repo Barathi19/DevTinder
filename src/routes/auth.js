@@ -9,18 +9,25 @@ authRouter.post("/signup", validateSignUpData, async (req, res) => {
   const user = new User(req.body);
   await user.save();
 
+  const token = user.getJWT();
+
   res
     .status(200)
-    .json({ success: true, message: "User created successfully!" });
+    .cookie("token", token, { expires: new Date(Date.now() + 24 * 3600000) })
+    .json({
+      success: true,
+      message: "User created successfully!",
+      data: user.getDetail(),
+    });
 });
 
 authRouter.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
+  const { emailId, password } = req.body;
+  if (!emailId || !password) {
     throw new ErrorResponse("Invalid credentials", 400);
   }
 
-  const user = await User.findOne({ emailId: email });
+  const user = await User.findOne({ emailId });
 
   if (!user) {
     throw new ErrorResponse("User not found.", 404);

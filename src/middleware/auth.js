@@ -15,7 +15,7 @@ const authUser = async (req, _, next) => {
     const user = await User.findById(decoded._id);
 
     if (!user) {
-      next(new ErrorResponse("User not found", 404));
+      next(new ErrorResponse("User not found", 401));
     }
 
     req.user = user;
