@@ -5,7 +5,7 @@ const ErrorResponse = require("../utils/errorResponse");
 const authUser = async (req, _, next) => {
   try {
     if (!req.cookies || !req.cookies.token) {
-      next(new ErrorResponse("Unauthorized, please login!", 401));
+      return next(new ErrorResponse("Unauthorized, please login!", 401));
     }
 
     const { token } = req.cookies;
@@ -15,7 +15,7 @@ const authUser = async (req, _, next) => {
     const user = await User.findById(decoded._id);
 
     if (!user) {
-      next(new ErrorResponse("User not found", 401));
+      return next(new ErrorResponse("User not found", 401));
     }
 
     req.user = user;

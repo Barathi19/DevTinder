@@ -98,9 +98,19 @@ const validateReviewConnectionRequest = (req, _, next) => {
   next();
 };
 
+const validateGetChatHistory = (req, _, next) => {
+  const { targetUserId } = req.params;
+
+  if (!validator.isMongoId(targetUserId)) {
+    throw new ErrorResponse("targetUserId is not valid ObjectId", 400);
+  }
+
+  next();
+};
 module.exports = {
   validateSignUpData,
   validateEditProfileData,
   validateUserConnectionRequest,
   validateReviewConnectionRequest,
+  validateGetChatHistory,
 };
